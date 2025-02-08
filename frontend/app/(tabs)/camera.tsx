@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, ActivityIndicator } from 'react-native';
-import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
 import { AntDesign } from '@expo/vector-icons';
 
@@ -10,15 +10,6 @@ export default function CameraScreen() {
   const router = useRouter();
   const cameraRef = useRef<CameraView | null>(null);
 
-  const takePicture = async () => {
-    if (!cameraRef.current) return;
-  
-    const photo = await cameraRef.current.takePictureAsync();
-    photo?.uri ? console.log('Photo taken:', photo.uri) : console.error('Failed to take photo');
-  
-    router.back();
-  };
-
   useEffect(() => {
     const request = async () => {
       await (!permission?.granted ? requestPermission() : null);
@@ -26,6 +17,15 @@ export default function CameraScreen() {
     };
     request();
   }, []);
+
+  const takePicture = async () => {
+    if (!cameraRef.current) return;
+
+    const photo = await cameraRef.current.takePictureAsync();
+    photo?.uri ? console.log('Photo taken:', photo.uri) : console.error('Failed to take photo');
+
+    router.push('/');
+  };
 
   if (isLoading) {
     return (
@@ -54,7 +54,6 @@ export default function CameraScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
   },
   loadingContainer: {
     flex: 1,
@@ -65,24 +64,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   buttonContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    backgroundColor: 'transparent',
-    margin: 64,
-  },
-  button: {
-    alignSelf: 'flex-end',
+    position: 'absolute',
+    bottom: 100,
+    left: 0,
+    right: 0,
     alignItems: 'center',
-    backgroundColor: '#5555FF',
-    padding: 10,
-    borderRadius: 10,
   },
   captureButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#9D50BB',
+    backgroundColor: '#6666ff',
     padding: 15,
     borderRadius: 50,
     width: 180,
@@ -91,7 +83,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     marginLeft: 8,
-    fontWeight: 'bold',
     color: 'white',
   },
 });
