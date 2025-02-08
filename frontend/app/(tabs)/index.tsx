@@ -1,8 +1,8 @@
-import { Image, StyleSheet, Platform } from 'react-native';
-
+import { Image, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { AntDesign } from '@expo/vector-icons';
 
 export default function HomeScreen() {
   return (
@@ -18,10 +18,15 @@ export default function HomeScreen() {
         <ThemedText type="title">Welcome to BloomIQ!</ThemedText>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
-        <ThemedText>
-          Tap below to take a photo.
-        </ThemedText>
+        <ThemedText>Tap below to take a photo.</ThemedText>
       </ThemedView>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.captureButton} onPress={() => console.log('Take Photo Pressed')}>
+          <AntDesign name="camera" size={24} color="white" />
+          <Text style={styles.buttonText}>Take a Photo</Text>
+        </TouchableOpacity>
+      </View>
+
     </ParallaxScrollView>
   );
 }
@@ -41,5 +46,24 @@ const styles = StyleSheet.create({
     width: '100%',
     height: undefined,
     transform: [{ scale: 1.3 }],
+  },
+  buttonContainer: {
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  captureButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#6666ff',
+    padding: 15,
+    borderRadius: 50,
+    width: 180,
+    height: 60,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    marginLeft: 8, // ✅ Space between icon and text
   },
 });
