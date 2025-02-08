@@ -1,8 +1,10 @@
+import React, { useState } from 'react';
 import { Image, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { AntDesign } from '@expo/vector-icons';
+import { Camera } from 'expo-camera';
 
 export default function HomeScreen() {
   return (
