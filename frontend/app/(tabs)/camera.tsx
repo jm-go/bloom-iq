@@ -4,7 +4,6 @@ import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { ThemedView } from '@/components/ThemedView';
-import LinearGradient from 'react-native-linear-gradient';
 
 export default function CameraScreen() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -132,7 +131,7 @@ const styles = StyleSheet.create({
   submitButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#00C853',
+    backgroundColor: '#ff99ff',
     padding: 15,
     borderRadius: 50,
     width: 150,
