@@ -18,7 +18,7 @@ export default function HomeScreen() {
         <ThemedText type="title">Welcome to BloomIQ!</ThemedText>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
-        <ThemedText>Tap below to take a photo.</ThemedText>
+        <ThemedText>Curious about a flower? Take a picture, and BloomIQ will tell you what it is!</ThemedText>
       </ThemedView>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.captureButton} onPress={() => console.log('Take Photo Pressed')}>
@@ -26,7 +26,6 @@ export default function HomeScreen() {
           <Text style={styles.buttonText}>Take a Photo</Text>
         </TouchableOpacity>
       </View>
-
     </ParallaxScrollView>
   );
 }
@@ -64,6 +63,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 16,
-    marginLeft: 8, // ✅ Space between icon and text
+    marginLeft: 8,
   },
 });
