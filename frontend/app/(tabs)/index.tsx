@@ -4,9 +4,11 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { AntDesign } from '@expo/vector-icons';
-import { Camera } from 'expo-camera';
+import { useRouter } from 'expo-router';
 
 export default function HomeScreen() {
+  const router = useRouter();
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -23,7 +25,7 @@ export default function HomeScreen() {
         <ThemedText>Curious about a flower? Take a picture, and BloomIQ will tell you what it is!</ThemedText>
       </ThemedView>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.captureButton} onPress={() => console.log('Take Photo Pressed')}>
+        <TouchableOpacity style={styles.captureButton} onPress={() => router.push('/camera')}> 
           <AntDesign name="camera" size={24} color="white" />
           <Text style={styles.buttonText}>Take a Photo</Text>
         </TouchableOpacity>
