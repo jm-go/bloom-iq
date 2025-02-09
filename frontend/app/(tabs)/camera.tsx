@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { View, Image, StyleSheet, ActivityIndicator, Animated } from 'react-native';
+import { View, Image, StyleSheet, ActivityIndicator } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
 import CustomButton from '@/components/CustomButton';
@@ -12,7 +12,6 @@ export default function CameraScreen() {
   const router = useRouter();
   const cameraRef = useRef<CameraView | null>(null);
   const [photoUri, setPhotoUri] = useState<string | null>(null);
-  const fadeAnim = useRef(new Animated.Value(0)).current;
   
   useEffect(() => {
     const request = async () => {
@@ -22,25 +21,19 @@ export default function CameraScreen() {
     request();
   }, []);
 
+  useEffect(() => {
+    if (!permission) return;
+  
+    if (permission.status === 'denied') {
+      router.replace('/');
+    }
+  }, [permission]);
+
   const takePicture = async () => {
     if (!cameraRef.current) return;
 
-    setIsLoading(true);
     const photo = await cameraRef.current.takePictureAsync();
-    
-    if (photo?.uri) {
-      setPhotoUri(photo.uri);
-      setIsLoading(false);
-
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 400,
-        useNativeDriver: true,
-      }).start();
-    } else {
-      console.error('Error. Please try again.');
-      setIsLoading(false);
-    }
+    photo?.uri ? setPhotoUri(photo.uri) : console.error('Error. Please try again.');
   };
 
   const submitPhoto = () => {
@@ -57,7 +50,7 @@ export default function CameraScreen() {
     );
   }
 
-  if (!permission?.granted) return null; // TODO: Improve this scenario
+  if (!permission?.granted) return null;
 
   return (
     <ThemedView style={styles.container}>
