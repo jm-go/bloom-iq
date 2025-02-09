@@ -37,12 +37,12 @@ export default function CameraScreen() {
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#6666FF" />
+        <ActivityIndicator size="large" color={Colors.dark.darkPurple} />
       </View>
     );
   }
 
-  if (!permission?.granted) return null;
+  if (!permission?.granted) return null; // TODO: Improve this scenario
 
   return (
     <ThemedView style={styles.container}>
