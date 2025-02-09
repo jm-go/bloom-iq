@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { Image, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
+import React from 'react';
+import { Image, StyleSheet, View } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { AntDesign } from '@expo/vector-icons';
+import { Colors } from '@/constants/Colors';
 import { useRouter } from 'expo-router';
+import CustomButton from '@/components/CustomButton';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -25,10 +26,13 @@ export default function HomeScreen() {
         <ThemedText>Curious about a flower? Take a picture, and BloomIQ will tell you what it is!</ThemedText>
       </ThemedView>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.captureButton} onPress={() => router.push('/camera')}> 
-          <AntDesign name="camera" size={24} color="white" />
-          <Text style={styles.buttonText}>Take a Photo</Text>
-        </TouchableOpacity>
+        <CustomButton
+          text="Take a Photo"
+          icon="camera"
+          onPress={() => router.push('/camera')}
+          backgroundColor={Colors.dark.primaryButton}
+          width={180}
+        />
       </View>
     </ParallaxScrollView>
   );
@@ -53,20 +57,5 @@ const styles = StyleSheet.create({
   buttonContainer: {
     alignItems: 'center',
     marginTop: 20,
-  },
-  captureButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#6666ff',
-    padding: 15,
-    borderRadius: 50,
-    width: 180,
-    height: 60,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    marginLeft: 8,
   },
 });

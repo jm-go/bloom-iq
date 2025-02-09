@@ -1,9 +1,10 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { View, Image, TouchableOpacity, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Image, StyleSheet, ActivityIndicator, Animated } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
-import { AntDesign, MaterialIcons } from '@expo/vector-icons';
+import CustomButton from '@/components/CustomButton';
 import { ThemedView } from '@/components/ThemedView';
+import { Colors } from '@/constants/Colors';
 
 export default function CameraScreen() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -11,7 +12,8 @@ export default function CameraScreen() {
   const router = useRouter();
   const cameraRef = useRef<CameraView | null>(null);
   const [photoUri, setPhotoUri] = useState<string | null>(null);
-
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  
   useEffect(() => {
     const request = async () => {
       await (!permission?.granted ? requestPermission() : null);
@@ -23,8 +25,22 @@ export default function CameraScreen() {
   const takePicture = async () => {
     if (!cameraRef.current) return;
 
+    setIsLoading(true);
     const photo = await cameraRef.current.takePictureAsync();
-    photo?.uri ? setPhotoUri(photo.uri) : console.error('Error. Please try again.');
+    
+    if (photo?.uri) {
+      setPhotoUri(photo.uri);
+      setIsLoading(false);
+
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 400,
+        useNativeDriver: true,
+      }).start();
+    } else {
+      console.error('Error. Please try again.');
+      setIsLoading(false);
+    }
   };
 
   const submitPhoto = () => {
@@ -36,12 +52,12 @@ export default function CameraScreen() {
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#6666FF" />
+        <ActivityIndicator size="large" color={Colors.dark.darkPurple} />
       </View>
     );
   }
 
-  if (!permission?.granted) return null;
+  if (!permission?.granted) return null; // TODO: Improve this scenario
 
   return (
     <ThemedView style={styles.container}>
@@ -49,23 +65,14 @@ export default function CameraScreen() {
         <View style={styles.previewContainer}>
           <Image source={{ uri: photoUri }} style={styles.previewImage} />
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.retakeButton} onPress={() => setPhotoUri(null)}>
-              <MaterialIcons name="refresh" size={24} color="white" />
-              <Text style={styles.text}>Retake</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.submitButton} onPress={submitPhoto}>
-              <AntDesign name="upload" size={24} color="white" />
-              <Text style={styles.text}>Upload</Text>
-            </TouchableOpacity>
+            <CustomButton text="Retake" icon="reload1" onPress={() => setPhotoUri(null)} />
+            <CustomButton text="Upload" icon="upload" onPress={submitPhoto} backgroundColor={Colors.dark.secondaryButton} />
           </View>
         </View>
       ) : (
         <CameraView style={styles.camera} facing="back" ref={cameraRef}>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.captureButton} onPress={takePicture}>
-              <AntDesign name="camera" size={24} color="white" />
-              <Text style={styles.text}>Capture</Text>
-            </TouchableOpacity>
+            <CustomButton text="Capture" icon="camera" onPress={takePicture} backgroundColor={Colors.dark.primaryButton} width={180} />
           </View>
         </CameraView>
       )}
@@ -107,40 +114,5 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     width: '100%',
     paddingHorizontal: 20,
-  },
-  captureButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#6666ff',
-    padding: 15,
-    borderRadius: 50,
-    width: 180,
-    height: 60,
-  },
-  retakeButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#6666FF',
-    padding: 15,
-    borderRadius: 50,
-    width: 150,
-    height: 60,
-    justifyContent: 'center',
-  },
-  submitButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#ff99ff',
-    padding: 15,
-    borderRadius: 50,
-    width: 150,
-    height: 60,
-    justifyContent: 'center',
-  },
-  text: {
-    fontSize: 16,
-    marginLeft: 8,
-    color: 'white',
   },
 });
