@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
-import { TouchableOpacity, Text, StyleSheet, ViewStyle } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import { Colors } from '@/constants/Colors';
 
 interface ButtonProps {
   text: string;
@@ -14,9 +15,9 @@ interface ButtonProps {
 const CustomButton: FC<ButtonProps> = ({
   text,
   onPress,
-  backgroundColor = '#6666ff',
+  backgroundColor = Colors.dark.primaryButton,
   icon,
-  textColor = '#fff',
+  textColor = Colors.dark.text,
   width,
 }) => {
   return (

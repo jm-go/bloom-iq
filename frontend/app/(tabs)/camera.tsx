@@ -4,6 +4,7 @@ import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
 import CustomButton from '@/components/CustomButton';
 import { ThemedView } from '@/components/ThemedView';
+import { Colors } from '@/constants/Colors';
 
 export default function CameraScreen() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -50,13 +51,13 @@ export default function CameraScreen() {
           <Image source={{ uri: photoUri }} style={styles.previewImage} />
           <View style={styles.buttonContainer}>
             <CustomButton text="Retake" icon="reload1" onPress={() => setPhotoUri(null)} />
-            <CustomButton text="Upload" icon="upload" onPress={submitPhoto} backgroundColor="#ff99ff" />
+            <CustomButton text="Upload" icon="upload" onPress={submitPhoto} backgroundColor={Colors.dark.secondaryButton} />
           </View>
         </View>
       ) : (
         <CameraView style={styles.camera} facing="back" ref={cameraRef}>
           <View style={styles.buttonContainer}>
-            <CustomButton text="Capture" icon="camera" onPress={takePicture} backgroundColor="#6666ff" width={180} />
+            <CustomButton text="Capture" icon="camera" onPress={takePicture} backgroundColor={Colors.dark.primaryButton} width={180} />
           </View>
         </CameraView>
       )}

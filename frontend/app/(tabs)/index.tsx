@@ -1,9 +1,9 @@
 import React from 'react';
-import { Image, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { AntDesign } from '@expo/vector-icons';
+import { Colors } from '@/constants/Colors';
 import { useRouter } from 'expo-router';
 import CustomButton from '@/components/CustomButton';
 
@@ -30,7 +30,7 @@ export default function HomeScreen() {
           text="Take a Photo"
           icon="camera"
           onPress={() => router.push('/camera')}
-          backgroundColor="#6666ff"
+          backgroundColor={Colors.dark.primaryButton}
           width={180}
         />
       </View>
