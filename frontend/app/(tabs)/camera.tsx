@@ -1,8 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { View, Image, TouchableOpacity, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Image, StyleSheet, ActivityIndicator } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
-import { AntDesign, MaterialIcons } from '@expo/vector-icons';
+import CustomButton from '@/components/CustomButton';
 import { ThemedView } from '@/components/ThemedView';
 
 export default function CameraScreen() {
@@ -49,23 +49,14 @@ export default function CameraScreen() {
         <View style={styles.previewContainer}>
           <Image source={{ uri: photoUri }} style={styles.previewImage} />
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.retakeButton} onPress={() => setPhotoUri(null)}>
-              <MaterialIcons name="refresh" size={24} color="white" />
-              <Text style={styles.text}>Retake</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.submitButton} onPress={submitPhoto}>
-              <AntDesign name="upload" size={24} color="white" />
-              <Text style={styles.text}>Upload</Text>
-            </TouchableOpacity>
+            <CustomButton text="Retake" icon="reload1" onPress={() => setPhotoUri(null)} />
+            <CustomButton text="Upload" icon="upload" onPress={submitPhoto} backgroundColor="#ff99ff" />
           </View>
         </View>
       ) : (
         <CameraView style={styles.camera} facing="back" ref={cameraRef}>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.captureButton} onPress={takePicture}>
-              <AntDesign name="camera" size={24} color="white" />
-              <Text style={styles.text}>Capture</Text>
-            </TouchableOpacity>
+            <CustomButton text="Capture" icon="camera" onPress={takePicture} backgroundColor="#6666ff" width={180} />
           </View>
         </CameraView>
       )}
@@ -107,40 +98,5 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     width: '100%',
     paddingHorizontal: 20,
-  },
-  captureButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#6666ff',
-    padding: 15,
-    borderRadius: 50,
-    width: 180,
-    height: 60,
-  },
-  retakeButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#6666FF',
-    padding: 15,
-    borderRadius: 50,
-    width: 150,
-    height: 60,
-    justifyContent: 'center',
-  },
-  submitButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#ff99ff',
-    padding: 15,
-    borderRadius: 50,
-    width: 150,
-    height: 60,
-    justifyContent: 'center',
-  },
-  text: {
-    fontSize: 16,
-    marginLeft: 8,
-    color: 'white',
   },
 });
