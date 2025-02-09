@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { FC, useRef, useState, useEffect } from 'react';
 import { View, Image, StyleSheet, ActivityIndicator } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
@@ -6,7 +6,7 @@ import CustomButton from '@/components/CustomButton';
 import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
 
-export default function CameraScreen() {
+const Camera: FC = () => {
   const [permission, requestPermission] = useCameraPermissions();
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
@@ -31,11 +31,16 @@ export default function CameraScreen() {
 
   const takePicture = async () => {
     if (!cameraRef.current) return;
-
+  
     const photo = await cameraRef.current.takePictureAsync();
-    photo?.uri ? setPhotoUri(photo.uri) : console.error('Error. Please try again.');
+    
+    if (photo?.uri) {
+      router.push({ pathname: '/result', params: { photoUri: photo.uri } });
+    } else {
+      console.error('Error. Please try again.');
+    }
   };
-
+  
   const submitPhoto = () => {
     console.log('Photo submitted:', photoUri);
     // TODO: Handle upload logic here
@@ -72,6 +77,8 @@ export default function CameraScreen() {
     </ThemedView>
   );
 }
+
+export default Camera;
 
 const styles = StyleSheet.create({
   container: {

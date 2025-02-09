@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
@@ -7,7 +7,7 @@ import { Colors } from '@/constants/Colors';
 import { useRouter } from 'expo-router';
 import CustomButton from '@/components/CustomButton';
 
-export default function HomeScreen() {
+const Home: FC = () => {
   const router = useRouter();
 
   return (
@@ -37,6 +37,8 @@ export default function HomeScreen() {
     </ParallaxScrollView>
   );
 }
+
+export default Home;
 
 const styles = StyleSheet.create({
   titleContainer: {
