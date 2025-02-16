@@ -35,16 +35,16 @@ const Camera: FC = () => {
     const photo = await cameraRef.current.takePictureAsync();
     
     if (photo?.uri) {
-      router.push({ pathname: '/result', params: { photoUri: photo.uri } });
+      setPhotoUri(photo.uri);
     } else {
       console.error('Error. Please try again.');
     }
   };
   
   const submitPhoto = () => {
-    console.log('Photo submitted:', photoUri);
-    // TODO: Handle upload logic here
-    router.back(); // TODO: navigate to final screen
+    if (!photoUri) return;
+    
+    router.push({ pathname: '/result', params: { photoUri } });
   };
 
   if (isLoading) {

@@ -20,6 +20,12 @@ const Result: React.FC = () => {
     }
   }, [photoUri]);
 
+  // TODO:
+  // button to come back to HOME and reset the screen
+  // change the messages
+  // add a loading spinner with styles! maybe I could make it a separate component
+  // flower name should be capitalized and in colour
+
   return (
     <ThemedView style={styles.container}>
       {!photoUri ? (
@@ -31,8 +37,7 @@ const Result: React.FC = () => {
         </View>
       ) : isLoading ? (
         <View style={styles.messageContainer}>
-          <ThemedText type="title">Please wait...</ThemedText>
-          <ActivityIndicator size="large" color={Colors.dark.tint} />
+          <ActivityIndicator size="large" color={Colors.dark.darkPurple} />
           <Text style={styles.text}>Identification in progress...</Text>
         </View>
       ) : (
@@ -63,6 +68,7 @@ const styles = StyleSheet.create({
       fontSize: 16,
       textAlign: 'center',
       marginTop: 10, 
+      marginBottom: 10,
       color: Colors.dark.text,
     },
   

@@ -40,7 +40,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <AntDesign name="camera" size={28} color={color} />,
         }}
       />
-            <Tabs.Screen
+      <Tabs.Screen
         name="result"
         options={{
           title: 'Result',
