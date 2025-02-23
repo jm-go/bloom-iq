@@ -116,7 +116,7 @@ exports[`CustomButton Snapshot Test renders correctly with a different text colo
   style={
     {
       "alignItems": "center",
-      "backgroundColor": "#ff99ff",
+      "backgroundColor": "#1ca9c9",
       "borderRadius": 50,
       "flexDirection": "row",
       "height": 60,
