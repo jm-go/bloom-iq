@@ -50,7 +50,6 @@ const Camera: FC = () => {
   
   const submitPhoto = () => {
     if (!photoUri) return;
-    
     router.push({ pathname: '/result', params: { photoUri } });
   };
 

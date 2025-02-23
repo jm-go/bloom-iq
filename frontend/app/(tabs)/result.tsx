@@ -15,23 +15,36 @@ const mockResults = [
 
 const Result: FC = () => {
   const { photoUri } = useLocalSearchParams<{ photoUri?: string }>();
+  const [storedPhotoUri, setStoredPhotoUri] = useState<string | null>(photoUri || null);
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<typeof mockResults | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     if (photoUri) {
+      setStoredPhotoUri(photoUri);
+    }
+  }, [photoUri]);
+
+  useEffect(() => {
+    if (storedPhotoUri) {
       setIsLoading(true);
       setTimeout(() => {
         setResults(mockResults);
         setIsLoading(false);
       }, 2000); // Simulate a delay of 2 seconds for now, to be improved
     }
-  }, [photoUri]);
+  }, [storedPhotoUri]);
+
+  const handleStartOver = () => {
+    setStoredPhotoUri(null);
+    setResults(null);
+    router.replace('/');
+  };
 
   return (
     <ThemedView style={styles.container}>
-      {!photoUri ? (
+      {!storedPhotoUri ? (
         // No photo detected
         <View style={styles.messageContainer}>
           <ThemedText style={styles.text}>
@@ -64,7 +77,7 @@ const Result: FC = () => {
           )}
         />
         <View style={styles.buttonContainer}>
-          <CustomButton text="Start Over" icon="reload1" onPress={() => router.replace('/')} backgroundColor={Colors.dark.primaryButton} />
+          <CustomButton text="Start Over" icon="reload1" onPress={handleStartOver} backgroundColor={Colors.dark.primaryButton} />
         </View>
       </View>
       )}
