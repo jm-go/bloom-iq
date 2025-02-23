@@ -1,4 +1,5 @@
 import React, { FC, useRef, useState, useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, Image, StyleSheet, ActivityIndicator } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
@@ -12,6 +13,12 @@ const Camera: FC = () => {
   const router = useRouter();
   const cameraRef = useRef<CameraView | null>(null);
   const [photoUri, setPhotoUri] = useState<string | null>(null);
+  
+  useFocusEffect(
+    React.useCallback(() => {
+      setPhotoUri(null);
+    }, [])
+  );
   
   useEffect(() => {
     const request = async () => {
@@ -84,19 +91,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
+
   camera: {
     flex: 1,
   },
+
   previewContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
+
   previewImage: {
     position: 'absolute',
     width: '100%',
@@ -104,6 +115,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     top: 0,
   },
+  
   buttonContainer: {
     position: 'absolute',
     bottom: 100,
