@@ -1,4 +1,5 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { FC, useRef, useState, useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, Image, StyleSheet, ActivityIndicator } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
@@ -6,12 +7,18 @@ import CustomButton from '@/components/CustomButton';
 import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
 
-export default function CameraScreen() {
+const Camera: FC = () => {
   const [permission, requestPermission] = useCameraPermissions();
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const cameraRef = useRef<CameraView | null>(null);
   const [photoUri, setPhotoUri] = useState<string | null>(null);
+  
+  useFocusEffect(
+    React.useCallback(() => {
+      setPhotoUri(null);
+    }, [])
+  );
   
   useEffect(() => {
     const request = async () => {
@@ -31,15 +38,20 @@ export default function CameraScreen() {
 
   const takePicture = async () => {
     if (!cameraRef.current) return;
-
+  
     const photo = await cameraRef.current.takePictureAsync();
-    photo?.uri ? setPhotoUri(photo.uri) : console.error('Error. Please try again.');
+    
+    if (photo?.uri) {
+      setPhotoUri(photo.uri);
+    } else {
+      console.error('Error. Please try again.');
+    }
   };
-
+  
   const submitPhoto = () => {
-    console.log('Photo submitted:', photoUri);
-    // TODO: Handle upload logic here
-    router.back(); // TODO: navigate to final screen
+    if (!photoUri) return;
+    
+    router.push({ pathname: '/result', params: { photoUri } });
   };
 
   if (isLoading) {
@@ -73,23 +85,29 @@ export default function CameraScreen() {
   );
 }
 
+export default Camera;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
+
   camera: {
     flex: 1,
   },
+
   previewContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
+
   previewImage: {
     position: 'absolute',
     width: '100%',
@@ -97,6 +115,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     top: 0,
   },
+  
   buttonContainer: {
     position: 'absolute',
     bottom: 100,

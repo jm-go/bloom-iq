@@ -26,7 +26,7 @@ export const Colors = {
     tabIconDefault: '#9BA1A6',
     tabIconSelected: tintColorDark,
     primaryButton: '#6666ff',
-    secondaryButton: '#ff99ff',
+    secondaryButton: '#1ca9c9',
     darkPurple: '#6666FF',
   },
 };
