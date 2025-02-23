@@ -1,50 +1,65 @@
-# Welcome to your Expo app 👋
+# Welcome to BloomIQ 🌼
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+BloomIQ is a mobile app designed to help users identify common UK flowers by simply taking a photo. This project is built using **React Native** and **Expo**, ensuring a smooth and efficient user experience.
 
-## Get started
+---
 
-1. Install dependencies
+## **Get Started**
 
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-    npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
+### 1. Install dependencies
 ```bash
-npm run reset-project
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. Start the app
+```bash
+npx expo start
+```
 
-## Learn more
+You'll be able to run the app on:
+- **Development build** ([Docs](https://docs.expo.dev/develop/development-builds/introduction/))
+- **Android Emulator** ([Docs](https://docs.expo.dev/workflow/android-studio-emulator/))
+- **iOS Simulator** ([Docs](https://docs.expo.dev/workflow/ios-simulator/))
+- **Expo Go** ([Docs](https://expo.dev/go))
 
-To learn more about developing your project with Expo, look at the following resources:
+This project follows **file-based routing** ([Docs](https://docs.expo.dev/router/introduction/)), making navigation easier.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+---
 
-## Join the community
+## **Project Overview**
+### **Goal of the App**
+BloomIQ helps users identify flowers by analysing photos. The app is powered by a fine-tuned MobileNet CNN model, which processes the image and provides a list of possible matches with accuracy percentages. The model has been optimized for real-time flower classification, ensuring accurate results while keeping inference fast and efficient.
 
-Join our community of developers creating universal apps.
+## **App Structure & Screens**
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### **1. Home Screen (`index.tsx`)**
+- Displays a **welcome message**.
+- Encourages users to **take a flower photo**.
+- Includes a **"Take a Photo" button**, navigating to the Camera screen.
+
+### **2. Camera Screen (`camera.tsx`)**
+- Uses **Expo Camera** to capture an image.
+- Once a photo is taken, it shows a **preview**.
+- Users can **Retake** or **Upload** the image for identification.
+
+### **3. Result Screen (`result.tsx`)**
+- Displays **identification results**.
+- Shows the **top 3 best matches** with:
+  - **Flower name**
+  - **Accuracy percentage**
+  - **A small image preview**
+- Allows users to **start over** and take another photo.
+
+---
+
+## **Development Context**
+This prototype has been developed as part of my **MSc thesis** at the **University of Bath**. The goal is to explore real-time **flower identification using deep learning models** and build a functional user interface for non-technical users.
+
+---
+
+## **Future Improvements**
+- ✅ **Enhance the AI model with additional flower species**.
+- ✅ **Improve UI/UX with animations and better styling**.
+- ✅ **Store user history for past identifications**.
+
+---
