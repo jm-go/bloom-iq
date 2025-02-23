@@ -46,16 +46,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
   },
+
   stepContainer: {
     gap: 8,
     marginBottom: 8,
   },
+
   headerImage: {
     ...StyleSheet.absoluteFillObject,
     width: '100%',
     height: undefined,
     transform: [{ scale: 1.3 }],
   },
+  
   buttonContainer: {
     alignItems: 'center',
     marginTop: 20,
