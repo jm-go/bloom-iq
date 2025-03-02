@@ -5,6 +5,12 @@ import { ThemedView } from '@/components/ThemedView';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Colors } from '@/constants/Colors';
 import CustomButton from '@/components/CustomButton';
+import * as tf from '@tensorflow/tfjs';
+import * as jpeg from 'jpeg-js';
+import { fetch } from '@tensorflow/tfjs-react-native';
+// import {bundleResourceIO, decodeJpeg} from '@tensorflow/tfjs-react-native'
+// import * as FileSystem from 'expo-file-system';
+import { useTensorFlow } from '@/hooks/TensorFlowProvider';
 
 // Example flower data (mocked for now)
 const mockResults = [
@@ -14,10 +20,11 @@ const mockResults = [
 ];
 
 const Result: FC = () => {
+  const { isModelReady, model } = useTensorFlow();
   const { photoUri } = useLocalSearchParams<{ photoUri?: string }>();
   const [storedPhotoUri, setStoredPhotoUri] = useState<string | null>(photoUri || null);
   const [isLoading, setIsLoading] = useState(false);
-  const [results, setResults] = useState<typeof mockResults | null>(null);
+  const [results, setResults] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -27,14 +34,44 @@ const Result: FC = () => {
   }, [photoUri]);
 
   useEffect(() => {
-    if (storedPhotoUri) {
-      setIsLoading(true);
-      setTimeout(() => {
-        setResults(mockResults);
-        setIsLoading(false);
-      }, 2000); // Simulate a delay of 2 seconds for now, to be improved
+    predictFlower();
+  }, [storedPhotoUri, isModelReady, model]);
+
+  const predictFlower = async () => {
+    if (!storedPhotoUri || !isModelReady || !model) return;
+    setIsLoading(true);
+
+    try {
+      await tf.ready();
+      const imageTensor = await convertImageToTensor(storedPhotoUri);
+
+      if (imageTensor) {
+        const prediction = model.predict(imageTensor) as tf.Tensor;
+        console.log('Raw Prediction:', prediction);
+
+        // Process results
+        const predictionArray = await prediction.data();
+        console.log('Processed Prediction:', predictionArray);
+      }
+    } catch (error) {
+      console.error('Error during prediction:', error);
     }
-  }, [storedPhotoUri]);
+    setIsLoading(false);
+  };
+
+  const convertImageToTensor = async (uri: string): Promise<tf.Tensor | null> => {
+    try {
+      const response = await fetch(uri, {}, { isBinary: true });
+      const imageData = await response.arrayBuffer();
+      const rawImageData = new Uint8Array(imageData);
+      const { width, height, data } = jpeg.decode(rawImageData, { useTArray: true });
+
+      return tf.tensor3d(data, [height, width, 3]).resizeNearestNeighbor([224, 224]).toFloat().expandDims();
+    } catch (error) {
+      console.error('Error converting image to tensor:', error);
+      return null;
+    }
+  };
 
   const handleStartOver = () => {
     setStoredPhotoUri(null);
@@ -45,17 +82,15 @@ const Result: FC = () => {
   return (
     <ThemedView style={styles.container}>
       {!storedPhotoUri ? (
-        // No photo detected
+        // No Image Detected
         <View style={styles.messageContainer}>
-          <ThemedText style={styles.text}>
-            No image detected. Upload a flower photo to continue.
-          </ThemedText>
-            <View style={styles.buttonContainer}>
-              <CustomButton text="Go Back" onPress={() => router.replace('/camera')} />
-            </View>
+          <ThemedText style={styles.text}>No image detected. Upload a flower photo to continue.</ThemedText>
+          <View style={styles.buttonContainer}>
+            <CustomButton text="Go Back" onPress={() => router.replace('/camera')} />
+          </View>
         </View>
       ) : isLoading ? (
-        // Loading state
+        // Loading Spinner
         <View style={styles.messageContainer}>
           <ActivityIndicator size="large" color={Colors.dark.darkPurple} />
           <ThemedText style={styles.text}>Identification in progress...</ThemedText>
@@ -63,7 +98,7 @@ const Result: FC = () => {
       ) : (
         // Identification Results
         <View style={styles.resultContainer}>
-        <FlatList
+                  <FlatList
           data={results}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
@@ -76,10 +111,10 @@ const Result: FC = () => {
             </View>
           )}
         />
-        <View style={styles.buttonContainer}>
-          <CustomButton text="Start Over" icon="reload1" onPress={handleStartOver} backgroundColor={Colors.dark.primaryButton} />
+          <View style={styles.buttonContainer}>
+            <CustomButton text="Start Over" icon="reload1" onPress={handleStartOver} backgroundColor={Colors.dark.primaryButton} />
+          </View>
         </View>
-      </View>
       )}
     </ThemedView>
   );
