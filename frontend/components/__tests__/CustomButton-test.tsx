@@ -3,7 +3,7 @@ import renderer from 'react-test-renderer';
 import CustomButton from '../CustomButton';
 import { Colors } from '@/constants/Colors';
 
-describe('CustomButton Snapshot Test', () => {
+describe('test CustomButton.tsx', () => {
   it('renders correctly with default props', () => {
     const tree = renderer.create(
       <CustomButton text="Take a Photo" onPress={() => {}} />
