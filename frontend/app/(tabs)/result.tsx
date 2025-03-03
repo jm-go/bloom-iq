@@ -5,19 +5,18 @@ import { ThemedView } from '@/components/ThemedView';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Colors } from '@/constants/Colors';
 import CustomButton from '@/components/CustomButton';
-
-// Example flower data (mocked for now)
-const mockResults = [
-  { id: 1, name: 'Phlox paniculata ‘David’', accuracy: 90, image: require('@/assets/images/flower_a.jpeg') },
-  { id: 2, name: 'Cardamine occulta', accuracy: 80, image: require('@/assets/images/flower_b.webp') },
-  { id: 3, name: 'Lily Of The Valley', accuracy: 75, image: require('@/assets/images/flower_c.jpeg') },
-];
+import * as tf from '@tensorflow/tfjs';
+import {decodeJpeg} from '@tensorflow/tfjs-react-native'
+import * as FileSystem from 'expo-file-system';
+import { useTensorFlow } from '@/hooks/TensorFlowProvider';
+import { FlowersMap } from '@/constants/FlowersMap';
 
 const Result: FC = () => {
+  const { isModelReady, model } = useTensorFlow();
   const { photoUri } = useLocalSearchParams<{ photoUri?: string }>();
   const [storedPhotoUri, setStoredPhotoUri] = useState<string | null>(photoUri || null);
   const [isLoading, setIsLoading] = useState(false);
-  const [results, setResults] = useState<typeof mockResults | null>(null);
+  const [results, setResults] = useState<any[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -27,35 +26,87 @@ const Result: FC = () => {
   }, [photoUri]);
 
   useEffect(() => {
-    if (storedPhotoUri) {
-      setIsLoading(true);
-      setTimeout(() => {
-        setResults(mockResults);
-        setIsLoading(false);
-      }, 2000); // Simulate a delay of 2 seconds for now, to be improved
-    }
-  }, [storedPhotoUri]);
+    predictFlower();
+  }, [storedPhotoUri, isModelReady, model]);
+
+  const predictFlower = async () => {
+    if (!storedPhotoUri || !isModelReady || !model) return;
+    setIsLoading(true);
+
+    try {
+      await tf.ready();
+      const imageTensor = await transformImageToTensor(storedPhotoUri);
+
+      if (imageTensor) {
+        const prediction = model.predict(imageTensor) as tf.Tensor;
+
+         // Process results
+         const predictionArray = await prediction.data();
+         console.log("Predictions:", predictionArray);
+ 
+         // Get top 3 predictions with their labels
+         const topPredictions = Array.from(predictionArray)
+           .map((score, index) => ({ index, score })) // Map index with score
+           .sort((a, b) => b.score - a.score) // Sort by confidence score
+           .slice(0, 3)
+           .map(({ index, score }) => ({
+             id: index,
+             name: FlowersMap[index]?.name || 'Unknown',
+             image: FlowersMap[index]?.image || require('@/assets/images/flower-placeholder.png'),
+             confidence: (score * 100).toFixed(2) + '%',
+           }));
+ 
+         setResults(topPredictions);
+       }
+     } catch (error) {
+       console.error('Error during prediction:', error);
+     }
+     setIsLoading(false);
+   };
+
+  const transformImageToTensor = async (uri: string): Promise<tf.Tensor> => {
+    // Read the image as base64
+    const img64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
+    const imgBuffer = tf.util.encodeString(img64, 'base64').buffer;
+    const raw = new Uint8Array(imgBuffer);
+  
+    // Decode JPEG into tensor
+    let imgTensor = decodeJpeg(raw);
+  
+    // Convert dtype to float32
+    imgTensor = imgTensor.toFloat(); 
+  
+    // Normalize values to [0, 1] range
+    imgTensor = imgTensor.div(tf.scalar(255));
+  
+    // Resize image to match model input size (224x224)
+    imgTensor = tf.image.resizeBilinear(imgTensor, [224, 224]);
+  
+    // Expand dimensions to add batch size (1, 224, 224, 3)
+    const img = imgTensor.expandDims(0);
+  
+    return img;
+  };
+
 
   const handleStartOver = () => {
     setStoredPhotoUri(null);
-    setResults(null);
+    setResults([]);
     router.replace('/');
   };
 
   return (
     <ThemedView style={styles.container}>
       {!storedPhotoUri ? (
-        // No photo detected
+        // No Image Detected
         <View style={styles.messageContainer}>
-          <ThemedText style={styles.text}>
-            No image detected. Upload a flower photo to continue.
-          </ThemedText>
-            <View style={styles.buttonContainer}>
-              <CustomButton text="Go Back" onPress={() => router.replace('/camera')} />
-            </View>
+          <ThemedText style={styles.text}>No image detected. Upload a flower photo to continue.</ThemedText>
+          <View style={styles.buttonContainer}>
+            <CustomButton text="Go Back" onPress={() => router.replace('/camera')} />
+          </View>
         </View>
       ) : isLoading ? (
-        // Loading state
+        // Loading Spinner
         <View style={styles.messageContainer}>
           <ActivityIndicator size="large" color={Colors.dark.darkPurple} />
           <ThemedText style={styles.text}>Identification in progress...</ThemedText>
@@ -63,23 +114,23 @@ const Result: FC = () => {
       ) : (
         // Identification Results
         <View style={styles.resultContainer}>
-        <FlatList
-          data={results}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
+          <FlatList
+            data={results}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
             <View style={styles.resultItem}>
               <Image source={item.image} style={styles.resultImage} />
               <View>
                 <ThemedText style={styles.resultText}>{item.name}</ThemedText>
-                <ThemedText style={styles.accuracyText}>Confidence: {item.accuracy}%</ThemedText>
+                <ThemedText style={styles.accuracyText}>Confidence: {item.confidence}</ThemedText>
               </View>
             </View>
           )}
         />
-        <View style={styles.buttonContainer}>
-          <CustomButton text="Start Over" icon="reload1" onPress={handleStartOver} backgroundColor={Colors.dark.primaryButton} />
+          <View style={styles.buttonContainer}>
+            <CustomButton text="Start Over" icon="reload1" onPress={handleStartOver} backgroundColor={Colors.dark.primaryButton} />
+          </View>
         </View>
-      </View>
       )}
     </ThemedView>
   );
@@ -116,21 +167,21 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       alignItems: 'center',
       backgroundColor: Colors.dark.background,
-      padding: 10,
-      marginVertical: 5,
+      padding: 5,
+      marginVertical: 3,
       borderRadius: 8,
       width: '100%',
     },
   
     resultImage: { 
-      width: 150, 
-      height: 150, 
+      width: 160, 
+      height: 160, 
       marginRight: 10,
       borderRadius: 5,
     },
   
     resultText: { 
-      fontSize: 17, 
+      fontSize: 16, 
       color: Colors.dark.tint,
     },
   

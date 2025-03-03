@@ -14,6 +14,7 @@ npm install
 ### 2. Start the app
 ```bash
 npx expo start
+npx expo start --dev-client
 ```
 
 You'll be able to run the app on:
