@@ -8,16 +8,10 @@ import CustomButton from '@/components/CustomButton';
 import * as tf from '@tensorflow/tfjs';
 // import * as jpeg from 'jpeg-js';
 // import { fetch } from '@tensorflow/tfjs-react-native';
-import {bundleResourceIO, decodeJpeg} from '@tensorflow/tfjs-react-native'
+import {decodeJpeg} from '@tensorflow/tfjs-react-native'
 import * as FileSystem from 'expo-file-system';
 import { useTensorFlow } from '@/hooks/TensorFlowProvider';
-
-// Example flower data (mocked for now)
-const mockResults = [
-  { id: 1, name: 'Phlox paniculata ‘David’', accuracy: 90, image: require('@/assets/images/flower_a.jpeg') },
-  { id: 2, name: 'Cardamine occulta', accuracy: 80, image: require('@/assets/images/flower_b.webp') },
-  { id: 3, name: 'Lily Of The Valley', accuracy: 75, image: require('@/assets/images/flower_c.jpeg') },
-];
+import { FlowersMap } from '@/constants/FlowersMap';
 
 const textLabels = [
   'pink primrose'
@@ -129,7 +123,7 @@ const Result: FC = () => {
   const { photoUri } = useLocalSearchParams<{ photoUri?: string }>();
   const [storedPhotoUri, setStoredPhotoUri] = useState<string | null>(photoUri || null);
   const [isLoading, setIsLoading] = useState(false);
-  const [results, setResults] = useState(null);
+  const [results, setResults] = useState<any[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -152,56 +146,30 @@ const Result: FC = () => {
 
       if (imageTensor) {
         const prediction = model.predict(imageTensor) as tf.Tensor;
-        console.log('Raw Prediction:', prediction);
 
-        // Process results
-        const predictionArray = await prediction.data();
-        const results = Object.fromEntries(textLabels.map((label, i) => [label, predictionArray[i]]));
-        const getTop5Predictions = (results: Record<string, number>) => {
-          return Object.fromEntries(
-            Object.entries(results)
-              .sort(([, scoreA], [, scoreB]) => scoreB - scoreA) // Sort descending by confidence
-              .slice(0, 5) // Take top 5
-          );
-        };
-        console.log('Processed Prediction:', getTop5Predictions(results));
-      }
-    } catch (error) {
-      console.error('Error during prediction:', error);
-    }
-    setIsLoading(false);
-  };
-
-  // const transformImageToTensor = async (uri: string): Promise<tf.Tensor | null> => {
-  //   try {
-  //     const response = await fetch(uri, {}, { isBinary: true });
-  //     const imageData = await response.arrayBuffer();
-  //     const rawImageData = new Uint8Array(imageData);
-  //     const { width, height, data } = jpeg.decode(rawImageData, { useTArray: true });
-
-  //     return tf.tensor3d(data, [height, width, 3]).resizeNearestNeighbor([224, 224]).toFloat().expandDims();
-  //   } catch (error) {
-  //     console.error('Error converting image to tensor:', error);
-  //     return null;
-  //   }
-  // };
-
-  // const transformImageToTensor = async (uri: string)=>{
-  //   //.ts: const transformImageToTensor = async (uri:string):Promise<tf.Tensor>=>{
-  //   //read the image as base64
-  //     const img64 = await FileSystem.readAsStringAsync(uri, {encoding:FileSystem.EncodingType.Base64})
-  //     const imgBuffer =  tf.util.encodeString(img64, 'base64').buffer
-  //     const raw = new Uint8Array(imgBuffer)
-  //     let imgTensor = decodeJpeg(raw)
-  //     const scalar = tf.scalar(255)
-  //   //resize the image
-  //     imgTensor = tf.image.resizeNearestNeighbor(imgTensor, [224, 224])
-  //   //normalize; if a normalization layer is in the model, this step can be skipped
-  //     // const tensorScaled = imgTensor.div(scalar)
-  //   //final shape of the rensor
-  //     const img = tf.reshape(imgTensor, [1,224,224,3])
-  //     return img
-  // }
+         // Process results
+         const predictionArray = await prediction.data();
+         console.log("Predictions:", predictionArray);
+ 
+         // Get top 3 predictions with their labels
+         const topPredictions = Array.from(predictionArray)
+           .map((score, index) => ({ index, score })) // Map index with score
+           .sort((a, b) => b.score - a.score) // Sort by confidence score
+           .slice(0, 3) // Take top 3
+           .map(({ index, score }) => ({
+             id: index,
+             name: FlowersMap[index]?.name || 'Unknown',
+             image: FlowersMap[index]?.image || require('@/assets/images/placeholder.jpg'),
+             confidence: (score * 100).toFixed(2) + '%',
+           }));
+ 
+         setResults(topPredictions); // Store top 3 results in state
+       }
+     } catch (error) {
+       console.error('Error during prediction:', error);
+     }
+     setIsLoading(false);
+   };
 
   const transformImageToTensor = async (uri: string): Promise<tf.Tensor> => {
     // Read the image as base64
@@ -215,10 +183,10 @@ const Result: FC = () => {
     // Convert dtype to float32 (this is the fix for your error)
     imgTensor = imgTensor.toFloat(); 
   
-    // Normalize values to [0, 1] range (optional, based on model requirements)
+    // Normalize values to [0, 1] range
     imgTensor = imgTensor.div(tf.scalar(255));
   
-    // Resize image to match model input size (assuming 224x224)
+    // Resize image to match model input size (224x224)
     imgTensor = tf.image.resizeBilinear(imgTensor, [224, 224]);
   
     // Expand dimensions to add batch size (1, 224, 224, 3)
@@ -230,7 +198,7 @@ const Result: FC = () => {
 
   const handleStartOver = () => {
     setStoredPhotoUri(null);
-    setResults(null);
+    setResults([]);
     router.replace('/');
   };
 
@@ -253,15 +221,15 @@ const Result: FC = () => {
       ) : (
         // Identification Results
         <View style={styles.resultContainer}>
-                  <FlatList
-          data={results}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
+          <FlatList
+            data={results}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
             <View style={styles.resultItem}>
               <Image source={item.image} style={styles.resultImage} />
               <View>
                 <ThemedText style={styles.resultText}>{item.name}</ThemedText>
-                <ThemedText style={styles.accuracyText}>Confidence: {item.accuracy}%</ThemedText>
+                <ThemedText style={styles.accuracyText}>Confidence: {item.confidence}%</ThemedText>
               </View>
             </View>
           )}
