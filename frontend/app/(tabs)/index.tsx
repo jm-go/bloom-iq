@@ -6,6 +6,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
 import { useRouter } from 'expo-router';
 import CustomButton from '@/components/CustomButton';
+import ImageUpload from '@/components/ImageUpload';
 
 const Home: FC = () => {
   const router = useRouter();
@@ -23,16 +24,18 @@ const Home: FC = () => {
         <ThemedText type="title">Welcome to BloomIQ!</ThemedText>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
-        <ThemedText>Curious about a flower? Take a picture, and BloomIQ will tell you what it is!</ThemedText>
+        <ThemedText>Curious about a flower? Take a picture or upload one from your gallery, and BloomIQ will tell you what it is!</ThemedText>
       </ThemedView>
       <View style={styles.buttonContainer}>
         <CustomButton
-          text="Take a Photo"
+          text="Capture"
           icon="camera"
           onPress={() => router.push('/camera')}
           backgroundColor={Colors.dark.primaryButton}
-          width={180}
+          width={160}
         />
+         <View style={{ width: 20 }} /> 
+         <ImageUpload /> 
       </View>
     </ParallaxScrollView>
   );
@@ -60,6 +63,8 @@ const styles = StyleSheet.create({
   },
   
   buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
     marginTop: 20,
   },

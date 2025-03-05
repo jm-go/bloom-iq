@@ -9,7 +9,7 @@ import * as tf from '@tensorflow/tfjs';
 import {decodeJpeg} from '@tensorflow/tfjs-react-native'
 import * as FileSystem from 'expo-file-system';
 import { useTensorFlow } from '@/hooks/TensorFlowProvider';
-import { FlowersMap } from '@/constants/FlowersMap';
+import { FlowerMap } from '@/constants/FlowerMap';
 
 const Result: FC = () => {
   const { isModelReady, model } = useTensorFlow();
@@ -51,8 +51,8 @@ const Result: FC = () => {
            .slice(0, 3)
            .map(({ index, score }) => ({
              id: index,
-             name: FlowersMap[index]?.name || 'Unknown',
-             image: FlowersMap[index]?.image || require('@/assets/images/flower-placeholder.png'),
+             name: FlowerMap[index]?.name || 'Unknown',
+             image: FlowerMap[index]?.image || require('@/assets/images/flower-placeholder.png'),
              confidence: (score * 100).toFixed(2) + '%',
            }));
  
