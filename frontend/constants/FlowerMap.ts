@@ -1,4 +1,4 @@
-export const FlowersMap = [
+export const FlowerMap = [
   { id: 0, name: 'Pink Primrose', image: require('@/assets/images/oxford-flowers/pink-primrose.jpg') },
   { id: 1, name: 'Hard-Leaved Pocket Orchid', image: require('@/assets/images/oxford-flowers/hard-leaved-pocket-orchid.jpg') },
   { id: 2, name: 'Canterbury Bells', image: require('@/assets/images/oxford-flowers/canterbury-bells.jpg') },
