@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CustomButton Snapshot Test renders correctly with a custom background color and icon 1`] = `
+exports[`test CustomButton.tsx renders correctly with a custom background color and icon 1`] = `
 <View
   accessibilityState={
     {
@@ -84,7 +84,7 @@ exports[`CustomButton Snapshot Test renders correctly with a custom background c
 </View>
 `;
 
-exports[`CustomButton Snapshot Test renders correctly with a different text color 1`] = `
+exports[`test CustomButton.tsx renders correctly with a different text color 1`] = `
 <View
   accessibilityState={
     {
@@ -116,7 +116,7 @@ exports[`CustomButton Snapshot Test renders correctly with a different text colo
   style={
     {
       "alignItems": "center",
-      "backgroundColor": "#1ca9c9",
+      "backgroundColor": "#755dd3",
       "borderRadius": 50,
       "flexDirection": "row",
       "height": 60,
@@ -147,7 +147,7 @@ exports[`CustomButton Snapshot Test renders correctly with a different text colo
 </View>
 `;
 
-exports[`CustomButton Snapshot Test renders correctly with default props 1`] = `
+exports[`test CustomButton.tsx renders correctly with default props 1`] = `
 <View
   accessibilityState={
     {
