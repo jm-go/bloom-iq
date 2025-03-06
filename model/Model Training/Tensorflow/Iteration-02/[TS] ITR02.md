@@ -18,5 +18,5 @@
 1. **Augmentation:** No augmentation this time. Introduction more complex image processing to diversify dataset
 2. **Learning Rate Scheduler:** Introduction learning rate scheduler to lower learning rate over time.
 
-![alt text](img/training_metrics.png)
-
+![alt text](img/fe_training_metrics.png)
+![alt text](img/ft_training_metrics.png)
