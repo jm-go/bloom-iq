@@ -10,7 +10,7 @@
 ## **Key Observations**
 
 - **Accuracy:** Training accuracy reached **96%**, while validation accuracy peaked at **91%**, suggesting some overfitting.
-- **Loss: The loss is around 0.9 for training and validation which it too high.**  
+- **Loss: The loss is around 0.1 for training and 0.3 for validation which it too high.**  
 - **Performance:** Decent performance as for the first training. Model is able to identify most of folwers with good quality but struggle with low quality photos
 
 
