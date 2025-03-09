@@ -34,9 +34,9 @@ const Home: FC = () => {
           backgroundColor={Colors.dark.primaryButton}
           width={160}
         />
-         <View style={{ width: 20 }} /> 
+        <View style={{ width: 20 }} /> 
          <ImageUpload /> 
-      </View>
+        </View>
     </ParallaxScrollView>
   );
 }

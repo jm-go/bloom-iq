@@ -128,7 +128,7 @@ const Result: FC = () => {
           )}
         />
           <View style={styles.buttonContainer}>
-            <CustomButton text="Start Over" icon="reload1" onPress={handleStartOver} backgroundColor={Colors.dark.primaryButton} />
+            <CustomButton text="Start Over" icon="reload1" onPress={handleStartOver} backgroundColor={Colors.dark.primaryButton} width={160} />
           </View>
         </View>
       )}
