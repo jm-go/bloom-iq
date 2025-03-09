@@ -2,7 +2,8 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import * as tf from '@tensorflow/tfjs';
 import '@tensorflow/tfjs-react-native';
 import { bundleResourceIO } from '@tensorflow/tfjs-react-native';
-import { View, ActivityIndicator } from 'react-native';
+import { ActivityIndicator } from 'react-native';
+import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
 
 const TensorFlowContext = createContext<{ isModelReady: boolean; model: tf.GraphModel | null }>({
@@ -23,8 +24,6 @@ export const TensorFlowProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         const modelJson = require('../assets/model/model.json');
         const modelWeights = require('../assets/model/group1-shard1of1.bin');
 
-
-        // const loadedModel = await tf.loadLayersModel(bundleResourceIO(modelJson, modelWeights));
         const loadedModel = await tf.loadGraphModel(bundleResourceIO(modelJson, modelWeights));
         setModel(loadedModel);
         setIsModelReady(true);
@@ -38,9 +37,9 @@ export const TensorFlowProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
   if (!isModelReady) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <ThemedView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" color={Colors.dark.darkPurple} />
-      </View>
+      </ThemedView>
     );
   }
 
