@@ -93,7 +93,6 @@ export default Camera;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.dark.background,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -131,16 +130,19 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   buttonContainer: {
-    marginTop: 20,
+    position: 'absolute',
+    bottom: 100,
+    left: 0,
+    right: 0,
     alignItems: 'center',
-    width: '100%',
   },
   previewButtonContainer: {
-    marginTop: 20,
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
-    paddingHorizontal: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    gap: 20,
+    bottom: 100,
   },
 });
 
