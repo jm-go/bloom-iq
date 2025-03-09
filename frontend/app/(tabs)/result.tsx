@@ -102,7 +102,7 @@ const Result: FC = () => {
         <View style={styles.messageContainer}>
           <ThemedText style={styles.text}>No image detected. Upload a flower photo to continue.</ThemedText>
           <View style={styles.buttonContainer}>
-            <CustomButton text="Go Back" onPress={() => router.replace('/camera')} />
+            <CustomButton icon='arrowleft' text="Go Back" onPress={() => router.replace('/camera')} />
           </View>
         </View>
       ) : isLoading ? (
