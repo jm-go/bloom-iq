@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     width: squareSize,
     height: squareSize,
     borderWidth: 1,
-    borderColor: Colors.dark.darkPurple,
+    borderColor: Colors.dark.grey,
     backgroundColor: 'transparent',
   },
   previewContainer: {
