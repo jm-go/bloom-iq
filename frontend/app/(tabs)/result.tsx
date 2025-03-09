@@ -17,6 +17,7 @@ const Result: FC = () => {
   const [storedPhotoUri, setStoredPhotoUri] = useState<string | null>(photoUri || null);
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<any[]>([]);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -32,6 +33,7 @@ const Result: FC = () => {
   const predictFlower = async () => {
     if (!storedPhotoUri || !isModelReady || !model) return;
     setIsLoading(true);
+    setError(null);
 
     try {
       await tf.ready();
@@ -59,32 +61,37 @@ const Result: FC = () => {
        }
      } catch (error) {
        console.error('Error during prediction:', error);
+       setError(`Oops! It looks like we couldn't process the image. Please ensure it's a valid JPEG image and retry.`);
      }
      setIsLoading(false);
    };
 
   const transformImageToTensor = async (uri: string): Promise<tf.Tensor> => {
-    // Read the image as base64
-    const img64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
-    const imgBuffer = tf.util.encodeString(img64, 'base64').buffer;
-    const raw = new Uint8Array(imgBuffer);
+    
+    try {
+      // Read the image as base64
+      const img64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
+      const imgBuffer = tf.util.encodeString(img64, 'base64').buffer;
+      const raw = new Uint8Array(imgBuffer);
   
-    // Decode JPEG into tensor
-    let imgTensor = decodeJpeg(raw);
+      // Decode JPEG into tensor
+      let imgTensor = decodeJpeg(raw);
   
-    // Convert dtype to float32
-    imgTensor = imgTensor.toFloat(); 
+      // Convert dtype to float32
+      imgTensor = imgTensor.toFloat(); 
   
-    // Normalize values to [0, 1] range
-    imgTensor = imgTensor.div(tf.scalar(255));
+      // Normalize values to [0, 1] range
+      imgTensor = imgTensor.div(tf.scalar(255));
   
-    // Resize image to match model input size (224x224)
-    imgTensor = tf.image.resizeBilinear(imgTensor, [224, 224]);
+      // Resize image to match model input size (224x224)
+      imgTensor = tf.image.resizeBilinear(imgTensor, [224, 224]);
   
-    // Expand dimensions to add batch size (1, 224, 224, 3)
-    const img = imgTensor.expandDims(0);
-  
-    return img;
+      // Expand dimensions to add batch size (1, 224, 224, 3)
+      return imgTensor.expandDims(0);
+    } catch (error) {
+      console.error('Error processing image:', error);
+      throw new Error('Failed to process image.');
+    }
   };
 
 
@@ -97,7 +104,6 @@ const Result: FC = () => {
   return (
     <ThemedView style={styles.container}>
       {!storedPhotoUri ? (
-        // No Image Detected
         <View style={styles.messageContainer}>
           <ThemedText style={styles.text}>No image detected. Upload a flower photo to continue.</ThemedText>
           <View style={styles.buttonContainer}>
@@ -105,27 +111,32 @@ const Result: FC = () => {
           </View>
         </View>
       ) : isLoading ? (
-        // Loading Spinner
         <View style={styles.messageContainer}>
           <ActivityIndicator size="large" color={Colors.dark.darkPurple} />
           <ThemedText style={styles.text}>Identification in progress...</ThemedText>
         </View>
+      ) : error ? (
+        <View style={styles.messageContainer}>
+          <ThemedText style={styles.errorText}>{error}</ThemedText>
+          <View style={styles.buttonContainer}>
+            <CustomButton text="Try Again" icon="reload1" onPress={handleStartOver} backgroundColor={Colors.dark.primaryButton} width={160} />
+          </View>
+        </View>
       ) : (
-        // Identification Results
         <View style={styles.resultContainer}>
           <FlatList
             data={results}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
-            <View style={styles.resultItem}>
-              <Image source={item.image} style={styles.resultImage} />
-              <View>
-                <ThemedText style={styles.resultText}>{item.name}</ThemedText>
-                <ThemedText style={styles.accuracyText}>Confidence: {item.confidence}</ThemedText>
+              <View style={styles.resultItem}>
+                <Image source={item.image} style={styles.resultImage} />
+                <View>
+                  <ThemedText style={styles.resultText}>{item.name}</ThemedText>
+                  <ThemedText style={styles.accuracyText}>Confidence: {item.confidence}</ThemedText>
+                </View>
               </View>
-            </View>
-          )}
-        />
+            )}
+          />
           <View style={styles.buttonContainer}>
             <CustomButton text="Start Over" icon="reload1" onPress={handleStartOver} backgroundColor={Colors.dark.primaryButton} width={160} />
           </View>
@@ -155,6 +166,12 @@ const styles = StyleSheet.create({
       marginTop: 10, 
       marginBottom: 10,
       color: Colors.dark.text,
+    },
+
+    errorText: { 
+      fontSize: 16,
+      textAlign: 'center',
+      marginBottom: 10,
     },
   
     resultContainer: { 
