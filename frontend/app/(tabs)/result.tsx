@@ -42,7 +42,6 @@ const Result: FC = () => {
 
          // Process results
          const predictionArray = await prediction.data();
-         console.log("Predictions:", predictionArray);
  
          // Get top 3 predictions with their labels
          const topPredictions = Array.from(predictionArray)
