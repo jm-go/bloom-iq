@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
-import { Alert } from 'react-native';
+import { Alert, Linking } from 'react-native';
 import { useRouter } from 'expo-router';
 import CustomButton from './CustomButton';
 import { Colors } from '@/constants/Colors';
+
+const openAppSettings = () => {
+  Linking.openSettings();
+};
 
 const ImageUpload: React.FC = () => {
   const router = useRouter();
@@ -18,7 +22,7 @@ const ImageUpload: React.FC = () => {
         'To upload a photo, please enable media access in your settings.',
         [
           { text: 'Cancel', style: 'cancel' },
-          { text: 'Open Settings', onPress: () => ImagePicker.requestMediaLibraryPermissionsAsync() }
+          { text: 'Open Settings', onPress: openAppSettings }
         ]
       );
       return;
@@ -33,7 +37,7 @@ const ImageUpload: React.FC = () => {
     if (!result.canceled && result.assets.length > 0) {
       const imageUri = result.assets[0].uri;
       setSelectedImage(imageUri);
-
+  
       // Navigate to the result page with the selected image
       router.push({
         pathname: '/result',
