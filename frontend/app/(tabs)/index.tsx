@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -26,7 +26,7 @@ const Home: FC = () => {
       <ThemedView style={styles.stepContainer}>
         <ThemedText>Curious about a flower? Take a picture or upload one from your gallery, and BloomIQ will tell you what it is!</ThemedText>
       </ThemedView>
-      <View style={styles.buttonContainer}>
+      <ThemedView style={styles.buttonContainer}>
         <CustomButton
           text="Capture"
           icon="camera"
@@ -34,9 +34,9 @@ const Home: FC = () => {
           backgroundColor={Colors.dark.primaryButton}
           width={160}
         />
-        <View style={{ width: 20 }} /> 
+        <ThemedView style={{ width: 20 }} /> 
          <ImageUpload /> 
-        </View>
+        </ThemedView>
     </ParallaxScrollView>
   );
 }

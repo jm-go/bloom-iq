@@ -1,6 +1,6 @@
 import React, { FC, useRef, useState, useEffect } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { View, Image, StyleSheet, ActivityIndicator, Dimensions } from 'react-native';
+import { Image, StyleSheet, ActivityIndicator, Dimensions } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
 import CustomButton from '@/components/CustomButton';
@@ -56,9 +56,9 @@ const Camera: FC = () => {
 
   if (isLoading) {
     return (
-      <View style={styles.loadingContainer}>
+      <ThemedView style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={Colors.dark.darkPurple} />
-      </View>
+      </ThemedView>
     );
   }
 
@@ -67,22 +67,22 @@ const Camera: FC = () => {
   return (
     <ThemedView style={styles.container}>
       {photoUri ? (
-        <View style={styles.previewContainer}>
+        <ThemedView style={styles.previewContainer}>
           <Image source={{ uri: photoUri }} style={styles.previewImage} />
-          <View style={styles.previewButtonContainer}>
+          <ThemedView style={styles.previewButtonContainer}>
             <CustomButton text="Retake" icon="reload1" onPress={() => setPhotoUri(null)} />
             <CustomButton text="Upload" icon="upload" onPress={submitPhoto} backgroundColor={Colors.dark.secondaryButton} />
-          </View>
-        </View>
+          </ThemedView>
+        </ThemedView>
       ) : (
-        <View style={styles.cameraContainer}>
+        <ThemedView style={styles.cameraContainer}>
           <CameraView style={styles.camera} ref={cameraRef} facing="back" ratio="1:1">
-            <View style={styles.squareOverlay} />
+            <ThemedView style={styles.squareOverlay} />
           </CameraView>
-          <View style={styles.buttonContainer}>
+          <ThemedView style={styles.buttonContainer}>
             <CustomButton text="Capture" icon="camera" onPress={takePicture} backgroundColor={Colors.dark.primaryButton} width={180} />
-          </View>
-        </View>
+          </ThemedView>
+        </ThemedView>
       )}
     </ThemedView>
   );

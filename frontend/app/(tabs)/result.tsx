@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
-import { View, Image, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
+import { Image, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -104,43 +104,43 @@ const Result: FC = () => {
   return (
     <ThemedView style={styles.container}>
       {!storedPhotoUri ? (
-        <View style={styles.messageContainer}>
+        <ThemedView style={styles.messageContainer}>
           <ThemedText style={styles.text}>No image detected. Upload a flower photo to continue.</ThemedText>
-          <View style={styles.buttonContainer}>
+          <ThemedView style={styles.buttonContainer}>
             <CustomButton icon='arrowleft' text="Go Back" onPress={() => router.replace('/camera')} />
-          </View>
-        </View>
+          </ThemedView>
+        </ThemedView>
       ) : isLoading ? (
-        <View style={styles.messageContainer}>
+        <ThemedView style={styles.messageContainer}>
           <ActivityIndicator size="large" color={Colors.dark.darkPurple} />
           <ThemedText style={styles.text}>Identification in progress...</ThemedText>
-        </View>
+        </ThemedView>
       ) : error ? (
-        <View style={styles.messageContainer}>
+        <ThemedView style={styles.messageContainer}>
           <ThemedText style={styles.errorText}>{error}</ThemedText>
-          <View style={styles.buttonContainer}>
+          <ThemedView style={styles.buttonContainer}>
             <CustomButton text="Try Again" icon="reload1" onPress={handleStartOver} backgroundColor={Colors.dark.primaryButton} width={160} />
-          </View>
-        </View>
+          </ThemedView>
+        </ThemedView>
       ) : (
-        <View style={styles.resultContainer}>
+        <ThemedView style={styles.resultContainer}>
           <FlatList
             data={results}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
-              <View style={styles.resultItem}>
+              <ThemedView style={styles.resultItem}>
                 <Image source={item.image} style={styles.resultImage} />
-                <View>
+                <ThemedView>
                   <ThemedText style={styles.resultText}>{item.name}</ThemedText>
                   <ThemedText style={styles.accuracyText}>Confidence: {item.confidence}</ThemedText>
-                </View>
-              </View>
+                </ThemedView>
+              </ThemedView>
             )}
           />
-          <View style={styles.buttonContainer}>
+          <ThemedView style={styles.buttonContainer}>
             <CustomButton text="Start Over" icon="reload1" onPress={handleStartOver} backgroundColor={Colors.dark.primaryButton} width={160} />
-          </View>
-        </View>
+          </ThemedView>
+        </ThemedView>
       )}
     </ThemedView>
   );
