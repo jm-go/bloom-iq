@@ -204,7 +204,6 @@ const styles = StyleSheet.create({
     accuracyText: {
       fontSize: 13,
       color: Colors.dark.text,
-      fontStyle: 'italic',
     },
 
     buttonContainer: {
