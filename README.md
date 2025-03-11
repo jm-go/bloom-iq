@@ -14,6 +14,14 @@ BloomIQ helps users identify flowers by analyzing photos. The app is powered by 
 - ✅ Efficient for real-time flower classification
 
 ## **App Structure & Screens**
+<p>
+  <img src="frontend/assets/images/readme/HomePage.png" alt="Home Page Preview" width="150" style="margin: 5px;">
+  <img src="frontend/assets/images/readme/CapturePreview.png" alt="Capture Preview" width="150" style="margin: 5px;">
+  <img src="frontend/assets/images/readme/CapturedPhotoPreview.png" alt="Captured PhotoPreview" width="150" style="margin: 5px;">
+  <img src="frontend/assets/images/readme/EditPreview.png" alt="Edit Preview" width="150" style="margin: 5px;">
+  <img src="frontend/assets/images/readme/InProgressPreview.png" alt="Identification in Progress" width="150" style="margin: 5px;">
+  <img src="frontend/assets/images/readme/ResultScreenPreview.png" alt="Result Screen Preview" width="150" style="margin: 5px;">
+</p>
 
 ### **1. Home Screen (`index.tsx`)**
 - Displays a **welcome message**.
@@ -42,6 +50,7 @@ BloomIQ helps users identify flowers by analyzing photos. The app is powered by 
 ---
 
 ## **📥 How to Run the App Locally**  
+> ⚠ **Note:** All commands should be executed in **CMD (Command Prompt) or Bash**, not PowerShell. Running them in PowerShell may cause issues with permissions or dependencies.
 
 ### **1. Prerequisites**  
 Before running the app, make sure you have:  
@@ -92,6 +101,9 @@ npx expo start
 Ensure you are in Expo Go build mode, or the QR code won’t work.
 - Check your terminal output to see the current build.
 - If needed, press 's' in the terminal to switch to Expo Go (see screenshot below).
+<br>
+
+<p><img src="frontend/assets/images/readme/expo-terminal.png" alt="Expo Terminal Preview" width="600"><br></p>
 
 ### **8. Connect to Expo Go**  
 
