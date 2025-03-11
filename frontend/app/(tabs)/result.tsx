@@ -66,32 +66,28 @@ const Result: FC = () => {
      setIsLoading(false);
    };
 
-  const transformImageToTensor = async (uri: string): Promise<tf.Tensor> => {
-    
-    try {
-      // Read the image as base64
-      const img64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
-      const imgBuffer = tf.util.encodeString(img64, 'base64').buffer;
-      const raw = new Uint8Array(imgBuffer);
-  
-      // Decode JPEG into tensor
-      let imgTensor = decodeJpeg(raw);
-  
-      // Convert dtype to float32
-      imgTensor = imgTensor.toFloat(); 
-  
-      // Normalize values to [0, 1] range
-      imgTensor = imgTensor.div(tf.scalar(255));
-  
-      // Resize image to match model input size (224x224)
-      imgTensor = tf.image.resizeBilinear(imgTensor, [224, 224]);
-  
-      // Expand dimensions to add batch size (1, 224, 224, 3)
-      return imgTensor.expandDims(0);
-    } catch (error) {
-      console.error('Error processing image:', error);
-      throw new Error('Failed to process image.');
-    }
+   const transformImageToTensor = async (uri: string): Promise<tf.Tensor> => {
+    // Read the image as base64
+    const img64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
+    const imgBuffer = tf.util.encodeString(img64, 'base64').buffer;
+    const raw = new Uint8Array(imgBuffer);
+
+    // Decode JPEG into tensor
+    let imgTensor = decodeJpeg(raw);
+
+    // Convert dtype to float32
+    imgTensor = imgTensor.toFloat(); 
+
+    // Normalize values to [0, 1] range
+    imgTensor = imgTensor.div(tf.scalar(255));
+
+    // Resize image to match model input size (224x224)
+    imgTensor = tf.image.resizeBilinear(imgTensor, [224, 224]);
+
+    // Expand dimensions to add batch size (1, 224, 224, 3)
+    const img = imgTensor.expandDims(0);
+
+    return img;
   };
 
 
