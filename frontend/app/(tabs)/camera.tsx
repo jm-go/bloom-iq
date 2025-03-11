@@ -40,7 +40,7 @@ const Camera: FC = () => {
 
   const takePicture = async () => {
     if (!cameraRef.current) return;
-    const photo = await cameraRef.current.takePictureAsync({ base64: true });
+    const photo = await cameraRef.current.takePictureAsync();
 
     if (photo?.uri) {
       setPhotoUri(photo.uri);
