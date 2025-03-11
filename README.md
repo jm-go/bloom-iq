@@ -14,7 +14,7 @@ BloomIQ helps users identify flowers by analyzing photos. The app is powered by 
 - ✅ Efficient for real-time flower classification
 
 ## **App Structure & Screens**
-<p>
+<p align="center">
   <img src="frontend/assets/images/readme/HomePage.png" alt="Home Page Preview" width="150" style="margin: 7px;">
   <img src="frontend/assets/images/readme/CapturePreview.png" alt="Capture Preview" width="150" style="margin: 7px;">
   <img src="frontend/assets/images/readme/CapturedPhotoPreview.png" alt="Captured PhotoPreview" width="150" style="margin: 7px;">
@@ -101,8 +101,6 @@ npx expo start
 Ensure you are in Expo Go build mode, or the QR code won’t work.
 - Check your terminal output to see the current build.
 - If needed, press 's' in the terminal to switch to Expo Go (see screenshot below).
-<br>
-
 <p><img src="frontend/assets/images/readme/expo-terminal.png" alt="Expo Terminal Preview" width="600"><br></p>
 
 ### **8. Connect to Expo Go**  
