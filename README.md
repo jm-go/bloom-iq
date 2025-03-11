@@ -19,6 +19,7 @@ BloomIQ helps users identify flowers by analyzing photos. The app is powered by 
   <img src="frontend/assets/images/readme/CapturePreview.png" alt="Capture Preview" width="150" style="margin: 7px;">
   <img src="frontend/assets/images/readme/CapturedPhotoPreview.png" alt="Captured PhotoPreview" width="150" style="margin: 7px;">
     <img src="frontend/assets/images/readme/EditPreview.png" alt="Edit Preview" width="150" style="margin: 7px;">
+  <br>
   <img src="frontend/assets/images/readme/InProgressPreview.png" alt="Identification in Progress" width="150" style="margin: 7px;">
   <img src="frontend/assets/images/readme/ResultScreenPreview.png" alt="Result Screen Preview" width="150" style="margin: 7px;">
 </p>
