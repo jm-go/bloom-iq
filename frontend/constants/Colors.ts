@@ -17,6 +17,7 @@ export const Colors = {
     primaryButton: '#6666ff',
     secondaryButton: '#755dd3',
     darkPurple: '#6666FF',
+    grey: '#636363',
   },
   dark: {
     text: '#ECEDEE',
@@ -28,5 +29,6 @@ export const Colors = {
     primaryButton: '#6666ff',
     secondaryButton: '#755dd3',
     darkPurple: '#6666FF',
+    grey: '#636363',
   },
 };
