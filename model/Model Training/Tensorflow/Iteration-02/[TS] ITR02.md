@@ -20,3 +20,9 @@
 
 ![alt text](img/fe_training_metrics.png)
 ![alt text](img/ft_training_metrics.png)
+
+The figure below displays combined training and validation curves over 30 epochs—feature‑extraction in epochs 1–10 (circle markers) 
+and fine‑tuning in epochs 11–30 (square markers) — with solid lines for training metrics and dashed lines for validation metrics, 
+showing the continuity between the two phases.
+
+![alt text](img/combined_metrics.png)
