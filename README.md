@@ -130,4 +130,4 @@ To ensure fast and efficient on-device inference, the app utilizes a **lightweig
 ## 📌 **Notes**
 - If you face issues with Expo Go, make sure you are logged in and connected to the correct build.
 - For **advanced debugging**, use expo doctor to check for dependency conflicts.
-- This build is optimized for Expo Go with SDK 52 due to compatibility requirements of native modules like TensorFlow. Using newer SDK versions may cause crashes or unexpected behaviour.
+- This build is optimized for Expo Go with SDK 53 due to compatibility requirements of native modules like TensorFlow. Using older SDK versions may cause crashes or unexpected behaviour.
