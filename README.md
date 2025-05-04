@@ -129,5 +129,5 @@ To ensure fast and efficient on-device inference, the app utilizes a **lightweig
 
 ## 📌 **Notes**
 - If you face issues with Expo Go, make sure you are logged in and connected to the correct build.
-- If the app crashes after uploading a photo, ensure you’re using a **valid JPEG or PNG image**.
 - For **advanced debugging**, use expo doctor to check for dependency conflicts.
+- This build is optimized for Expo Go with SDK 52 due to compatibility requirements of native modules like TensorFlow. Using newer SDK versions may cause crashes or unexpected behaviour.
