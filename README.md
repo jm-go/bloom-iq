@@ -2,6 +2,8 @@
 
 BloomIQ is a mobile app designed to help users identify common UK flowers by simply taking or uploading a photo. This project is built using **React Native** and **Expo**, ensuring a smooth and efficient user experience.
 
+View the demo here → [Demo Video](https://drive.google.com/file/d/18VBj7F8MlGL5rct-TskuEmxmIfTLuSKn/view?usp=sharing)
+
 ---
 
 ## 📱**Project Overview**
